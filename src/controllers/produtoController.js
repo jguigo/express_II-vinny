@@ -8,6 +8,7 @@ const ProdutoController = {
       res.status(200).json(listaDeProdutos);
    },
    cadastrarProduto: async (req, res) => {
+      console.log(req.user);
       const { nome, preco, quantidade, fabricante_id, categoria_id } = req.body;
 
       const novoProduto = await Produtos.create({

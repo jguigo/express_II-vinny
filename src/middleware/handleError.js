@@ -1,6 +1,7 @@
-//atender aqui na parte do require, porque o sequelize também tem uma tipo de validação e não é essa
+//atentar aqui na parte do require, porque o sequelize também tem uma tipo de validação e não é essa
 //que queremos!
 const { ValidationError } = require("express-validation");
+// const { UnauthorizedError } = require("express-jwt"); //importar o error! PS: NÃO FOI WTF?!
 
 module.exports = (error, req, res, next) => {
 
@@ -9,6 +10,21 @@ module.exports = (error, req, res, next) => {
    if(error instanceof ValidationError){
       return res.status(error.statusCode).json(error);
    }
+
+
+   //error que acontecem fora desse padrão e não é genérico, devemos colocar uma nova exceção! Também é importante
+   //saber que é necessário importar o erro! EEEEEE ao inves do statusCode usamos apenas status.
+   //PORQUE ESSE CASO NÃO FUNCIONOU UTILIZANDO O INSTACEOF??????????????????????????????????
+   // if(error instanceof UnauthorizedError){
+   //    return res.status(error.status).json(error);
+   // }
+
+   //esse aqui é como está descrito na doc, e não precisamos importar o erro! Vai ficar como gambiarra...
+   if(error.name === "UnauthorizedError"){
+      return res.status(error.status).json(error);
+   }
+
+
 
    //todo erro que não for de validação normalmente é um erro generico, então podemos retornar no
    //um erro generico o status 500 + mensagem de erro
